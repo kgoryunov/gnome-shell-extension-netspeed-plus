@@ -76,16 +76,8 @@ NetSpeedExtension.prototype = {
   },
 
   _formatSpeed: function(speed) {
-    let unit = 0;
-    while (speed >= 1000) {
-      speed /= 1000;
-      unit += 1;
-    }
-    let text;
-    if (speed == (speed | 0)) text = speed.toString();
-    // If speed is int
-    else text = speed.toFixed(this._decimalPlace).toString();
-    return text + ["B", "K", "M", "G"][unit];
+    speed /= 1024 * 1024;
+    return `${speed.toFixed(this._decimalPlace).toString()}M`;
   },
 
   _getBootTime: function() {
