@@ -22,22 +22,31 @@ const SchemaSource = imports.gi.Gio.SettingsSchemaSource;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 
-function getSettings () {
-    let extension = ExtensionUtils.getCurrentExtension();
-    let schema = extension.metadata['settings-schema'];
+function getSettings() {
+  let extension = ExtensionUtils.getCurrentExtension();
+  let schema = extension.metadata["settings-schema"];
 
-    let schemaDir = extension.dir.get_child('schema');
-    if (!schemaDir.query_exists(null))
-        throw new Error ("Schema directory " + schemaDir + " for " + extension.metadata.uuid + " not found.");
+  let schemaDir = extension.dir.get_child("schema");
+  if (!schemaDir.query_exists(null))
+    throw new Error(
+      "Schema directory " +
+        schemaDir +
+        " for " +
+        extension.metadata.uuid +
+        " not found."
+    );
 
-    let schemaSrc = SchemaSource.new_from_directory(schemaDir.get_path(),
-                                                    SchemaSource.get_default(),
-                                                    false);
+  let schemaSrc = SchemaSource.new_from_directory(
+    schemaDir.get_path(),
+    SchemaSource.get_default(),
+    false
+  );
 
-    let schemaObj = schemaSrc.lookup(schema, true);
-    if (!schemaObj)
-        throw new Error ("Schema " + schemaDir + " for " + extension.metadata.uuid + " not found.");
+  let schemaObj = schemaSrc.lookup(schema, true);
+  if (!schemaObj)
+    throw new Error(
+      "Schema " + schemaDir + " for " + extension.metadata.uuid + " not found."
+    );
 
-    return new Gio.Settings({ settings_schema: schemaObj });
+  return new Gio.Settings({ settings_schema: schemaObj });
 }
-
